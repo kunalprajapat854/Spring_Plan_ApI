@@ -1,0 +1,33 @@
+version: "3"
+services:
+      application:
+           image: spring-boot-planapi
+           ports:
+            - 8080:9090
+           networks:
+            - spring-boot-network
+           volumes:
+           - /data/springboot-app
+           depends_on:
+           - mysqldb
+      
+      mysqldb:
+         image: mysql:8.0.35
+         networks:
+           - spring-boot-network
+         volumes:
+           - /data/mysql
+         environment:
+          - MYSQL_ROOT_PASSWORD= Kunal@123
+          - MYSQL_ROOT_USERNAME= root
+          - MYSQL_DATABASE= practice 
+         
+         
+networks:
+  spring-boot-network:
+       
+       
+        
+           
+    
+                 
