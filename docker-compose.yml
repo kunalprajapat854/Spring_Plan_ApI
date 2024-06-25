@@ -1,33 +1,37 @@
-version: "3"
+version: '3.8'
+
 services:
-      application:
-           image: spring-boot-planapi
-           ports:
-            - 8080:9090
-           networks:
-            - spring-boot-network
-           volumes:
-           - /data/springboot-app
-           depends_on:
-           - mysqldb
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+     - spring-boot-net
+
+  application:
+    image: springboot-mysql-app
+    ports:
+      - "8080:9090"
+    depends_on:
+      - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/practice
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Kunal@123
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
       
-      mysqldb:
-         image: mysql:8.0.35
-         networks:
-           - spring-boot-network
-         volumes:
-           - /data/mysql
-         environment:
-          - MYSQL_ROOT_PASSWORD= Kunal@123
-          - MYSQL_ROOT_USERNAME= root
-          - MYSQL_DATABASE= practice 
-         
-         
+    networks:
+            - spring-boot-net
+
+volumes:
+  mysql_data:
 networks:
-  spring-boot-network:
-       
-       
-        
-           
-    
-                 
+  spring-boot-net:
